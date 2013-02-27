@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# This script dumps the color palette
+
+for i in {0..255} ; do
+	if [ $(( $i % 8 )) == 0 ]; then
+		printf "\n"
+	fi
+    printf "\x1b[38;5;${i}m ███\x1b[38;5;15m%03d" $i
+done
+
