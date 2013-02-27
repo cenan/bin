@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# rmh - Remote Mount Helper
+# This is a convenience script for mounting remote servers more easily
+
+MOUNTPOINT=$HOME/remote
+
+mount_remote() {
+	# create local mount point if it doesn't exist
+	if [ ! -d "$MOUNTPOINT/$SERVER" ]; then
+		mkdir --parents $MOUNTPOINT/$SERVER
+	fi
+
+	REMOTE_DIR=/home/$T_USER
+	if [ "$T_USER" = "root" ]; then
+		REMOTE_DIR=/root
+	fi
+
+	sshfs -o idmap=user $T_USER@$SERVER:$REMOTE_DIR $MOUNTPOINT/$SERVER
+}
+
+unmount_remote() {
+	fusermount -u $MOUNTPOINT/$1
+	if [ "$1" = "ds" ]; then
+		ssh -t ds sudo shutdown -h now
+	fi
+}
+
+usage() {
+	echo "usage: $0 {m|u} [user@]server"
+}
+
+if [ $# -lt 2 ];
+then
+	usage
+	exit 1
+fi
+
+# parse username if servername is like user@server
+if [[ $2 =~ "@" ]]
+then
+	SERVER=${2#*@}
+	T_USER=${2%@*}
+	MOUNTPOINT=$MOUNTPOINT/$T_USER
+else
+	SERVER=$2
+	T_USER=$USER
+fi
+
+case $1 in
+	m)
+		mount_remote
+	;;
+	u)
+		unmount_remote $2
+	;;
+	*)
+		usage
+		exit 1
+	;;
+esac
+
+exit 0
+
