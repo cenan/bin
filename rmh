@@ -21,9 +21,6 @@ mount_remote() {
 
 unmount_remote() {
 	fusermount -u $MOUNTPOINT/$1
-	if [ "$1" = "ds" ]; then
-		ssh -t ds sudo shutdown -h now
-	fi
 }
 
 usage() {
