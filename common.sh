@@ -3,13 +3,13 @@
 # $HOME/bin/common.sh
 
 function tmux_attach_if_exists {
-	tmux has-session -t $1
-	if [ $? -eq 0 ]; then
-		echo "Session $1 already exists, attaching..."
-		sleep 1
-		tmux attach -t $1
-		exit 0;
-	fi
+  tmux has-session -t $1
+  if [ $? -eq 0 ]; then
+    echo "Session $1 already exists, attaching..."
+    sleep 1
+    tmux attach -t $1
+    exit 0;
+  fi
 }
 
 txtred=$(tput setaf 1)
