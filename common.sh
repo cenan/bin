@@ -1,3 +1,7 @@
+# common functions for shell scripts
+# this file should always be named as
+# $HOME/bin/common.sh
+
 txtred=$(tput setaf 1)
 txtgreen=$(tput setaf 2)
 txtyellow=$(tput setaf 3)
@@ -8,7 +12,7 @@ function msg {
   if [[ -n "$SCRIPT_LOG" ]]; then
     /bin/echo `date +%T` $* | tee -a backup.log
   else
-	/bin/echo $*
+    /bin/echo $*
   fi
 }
 
