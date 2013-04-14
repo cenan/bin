@@ -20,7 +20,7 @@ txtreset=$(tput sgr0)
 
 function msg {
   if [[ -n "$SCRIPT_LOG" ]]; then
-    /bin/echo `date +%T` $* | tee -a backup.log
+    /bin/echo `date +%T` $* | tee -a $SCRIPT_LOG
   else
     /bin/echo $*
   fi
