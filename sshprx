@@ -9,7 +9,10 @@ PORT=5432
 
 if [ $# -lt 1 ]; then
 	warn "usage: sshprx server [port]"
-	warn "  port defaults to 5432"
+	warn "  port defaults to $PORT"
+	warn "  common ports:"
+	warn "    5432  POSTGRES"
+	warn "    3389  REMOTE DESKTOP"
 	exit 1
 fi
 
