@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# this scripts sets up a reverse ssh tunnel from REMOTE:PORT localhost:22
+
+source ~/bin/common.sh
+
+SERVER=$1
+PORT=2222
+
+if [ $# -lt 1 ]; then
+	warn "usage: sshprx server [port]"
+	warn "  port defaults to 2222"
+	exit 1
+fi
+
+if [ $# -gt 1 ]; then
+	PORT=$2
+fi
+
+inf "* Mapping localhost:22 to $SERVER:$PORT"
+ssh -R $PORT:localhost:22 $SERVER
+
+# vim: set filetype=sh :
+
