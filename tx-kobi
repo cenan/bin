@@ -1,0 +1,28 @@
+#!/bin/sh
+
+SESSION='kobi'
+
+tmux has-session -t $SESSION
+
+if [ $? -eq 0 ]; then
+	echo "Session $SESSION already exists, attaching..."
+	sleep 1
+	tmux -2 -u attach -t $SESSION
+	exit 0;
+fi
+
+cd ~/projects/kobi
+tmux new-session -d -s $SESSION
+
+tmux rename-window -t $SESSION:1 shell
+tmux new-window -t $SESSION:2 'vim public/index.php'
+tmux rename-window -t $SESSION:2 vim
+
+tmux new-window -t $SESSION:3 './scripts/devserver.sh'
+tmux rename-window -t $SESSION:3 'serve'
+tmux set-window-option -t $SESSION:3 automatic-rename off
+tmux split-window -t $SESSION:3 -h -p 50
+
+tmux select-window -t $SESSION:1
+tmux -2 -u attach -t $SESSION
+
