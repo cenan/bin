@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # this scripts sets up an ssh tunnel from localhost:PORT to REMOTE:PORT
+# remote can be an ip address or a hostname
 
 source ~/bin/common.sh
 
@@ -9,6 +10,7 @@ PORT=5432
 
 if [ $# -lt 1 ]; then
 	warn "usage: sshprx server [port]"
+	warn "  server can be an ip address or hostname"
 	warn "  port defaults to $PORT"
 	warn "  common ports:"
 	warn "    5432  POSTGRES"
@@ -20,9 +22,16 @@ if [ $# -gt 1 ]; then
 	PORT=$2
 fi
 
-inf "* Mapping $SERVER:$PORT to localhost:$PORT"
+if [ ! "$(echo $SERVER | grep '[0-9]\{1,3\}[.][0-9]\{1,3\}[.][0-9]\{1,3\}[.][0-9]\{1,3\}')" ]
+then
+	DESTINATION=`dig +short A $SERVER`
+	inf "* Resolved $SERVER as $DESTINATION"
+else
+	DESTINATION=$SERVER
+fi
+inf "* Mapping $DESTINATION:$PORT to localhost:$PORT"
 inf "* Type ctrl-c to stop"
-ssh -N $SERVER -L $PORT:localhost:$PORT
+ssh -N $DESTINATION -L $PORT:localhost:$PORT
 
 # vim: set filetype=sh :
 
