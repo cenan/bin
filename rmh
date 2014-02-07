@@ -3,6 +3,8 @@
 # rmh - Remote Mount Helper
 # This is a convenience script for mounting remote servers more easily
 
+source ~/bin/common.sh
+
 MOUNTPOINT=$HOME/remote
 
 mount_remote() {
@@ -26,6 +28,12 @@ unmount_remote() {
 usage() {
 	echo "usage: $0 {m|u} [user@]server"
 }
+
+if [ ! -x sshfs ];
+then
+	err "Error: sshfs command not found"
+	exit 1
+fi
 
 if [ $# -lt 2 ];
 then
