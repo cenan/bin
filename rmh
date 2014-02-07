@@ -20,7 +20,7 @@ mount_remote() {
 }
 
 unmount_remote() {
-	fusermount -u $MOUNTPOINT/$1
+	fusermount -u $MOUNTPOINT/$SERVER
 }
 
 usage() {
@@ -49,7 +49,7 @@ case $1 in
 		mount_remote
 	;;
 	u)
-		unmount_remote $2
+		unmount_remote
 	;;
 	*)
 		usage
