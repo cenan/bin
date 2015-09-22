@@ -1,0 +1,27 @@
+#!/bin/bash
+
+source ~/bin/common.sh
+
+if [ $# -lt 2 ]; then
+	warn "usage: ci new project"
+	warn "  create a new ci application"
+	exit 1
+fi
+
+inf "Creating directory $2"
+mkdir -p $2
+cd $2
+inf "Extracting codeigniter 3.0.1 ..."
+unzip -q ~/projects/lib/codeigniter-3.0.1.zip -d ./
+mv CodeIgniter-3.0.1/* ./
+mv CodeIgniter-3.0.1/.gitignore ./
+rmdir CodeIgniter-3.0.1
+if [[ $3 == "smarty" ]]
+then
+	inf "Setting up smarty ..."
+	rsync -r ~/projects/lib/CISmarty/ ./application
+	inf "Patching config file ..."
+	sed -i "s/libraries'] = array()/libraries'] = array('parser')/g" application/config/autoload.php
+fi
+inf "Done"
+
